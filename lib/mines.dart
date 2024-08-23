@@ -7,7 +7,8 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:stk9/clrs.dart';
+import 'package:stk9/main.dart';
+// import 'package:stk9/clrs.dart';
 import 'package:stk9/start.dart';
 
 class Mines extends StatefulWidget {
@@ -33,7 +34,7 @@ class _MinesState extends State<Mines> {
   }
 
   List<int> mat = [];
-  var clr = List.filled(25, c3);
+  var clr = List.filled(25, Restarter.c3);
   int mincon = 8;
   var mx = 8;
   var bx = 100.0;
@@ -62,187 +63,217 @@ class _MinesState extends State<Mines> {
         }
       },
       child: Scaffold(
-        backgroundColor: c2,
+        backgroundColor: Restarter.c2,
         body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(15),
-            child: Column(
+          child: Center(
+            child: Flex(
               mainAxisAlignment: MainAxisAlignment.center,
+              direction:
+                  MediaQuery.of(context).orientation == Orientation.portrait
+                      ? Axis.vertical
+                      : Axis.horizontal,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                      color: c3, borderRadius: BorderRadius.circular(5)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Mines',
-                          style: TextStyle(fontSize: 10, color: Colors.grey),
+                SizedBox(
+                  width: MediaQuery.of(context).size.shortestSide - 30,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        textAlign: TextAlign.center,
+                        'Press back button to cash-out.',
+                        style: TextStyle(
+                          color: Colors.blueGrey,
+                          fontSize: 10,
                         ),
-                        Row(
-                          children: [
-                            SizedBox(
-                                width: 200,
-                                height: 30,
-                                child: TextField(
-                                  controller: tx,
-                                  onChanged: (value) {
-                                    // setState(() {
-                                    //   bx = double.parse(value);
-                                    // });
-                                  },
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly
-                                  ],
-                                  keyboardType: TextInputType.number,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                  ),
-                                  decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: c2,
-                                      hintText: 'Amount',
-                                      hintStyle: TextStyle(
-                                        color: Colors.white30,
-                                        fontSize: 12,
-                                      ),
-                                      border: OutlineInputBorder()),
-                                )),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  // bx = bx / 2;
-
-                                  tx.value = TextEditingValue(
-                                      text:
-                                          '${double.parse(tx.value.text) / 2}');
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Text(
-                                  '½',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 12),
-                                ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Restarter.c3,
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Bet amt.',
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.grey),
                               ),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  // bx = bx * 2;
-
-                                  tx.value = TextEditingValue(
-                                      text:
-                                          '${double.parse(tx.value.text) * 2}');
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Text(
-                                  '2x',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 12),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text(
-                          'Mines',
-                          style: TextStyle(fontSize: 10, color: Colors.grey),
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 30,
-                          child: OutlinedButton(
-                            onPressed: () => showCupertinoModalPopup(
-                              context: context,
-                              builder: (context) => SizedBox(
-                                width: double.infinity,
-                                height: 250,
-                                child: CupertinoPicker(
-                                    itemExtent: 30,
-                                    scrollController:
-                                        FixedExtentScrollController(
-                                            initialItem: 7),
-                                    onSelectedItemChanged: (value) {
+                              Row(
+                                children: [
+                                  SizedBox(
+                                      width: 200,
+                                      height: 30,
+                                      child: TextField(
+                                        controller: tx,
+                                        onChanged: (value) {
+                                          // setState(() {
+                                          //   bx = double.parse(value);
+                                          // });
+                                        },
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.digitsOnly
+                                        ],
+                                        keyboardType: TextInputType.number,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                        ),
+                                        decoration: InputDecoration(
+                                            filled: true,
+                                            fillColor: Restarter.c2,
+                                            hintText: 'Amount',
+                                            hintStyle: TextStyle(
+                                              color: Colors.white30,
+                                              fontSize: 12,
+                                            ),
+                                            border: OutlineInputBorder()),
+                                      )),
+                                  InkWell(
+                                    onTap: () {
                                       setState(() {
-                                        mincon = value + 1;
+                                        // bx = bx / 2;
+
+                                        tx.value = TextEditingValue(
+                                            text:
+                                                '${double.parse(tx.value.text) / 2}');
                                       });
                                     },
-                                    children: List.generate(
-                                      24,
-                                      (index) => Container(
-                                          color: Colors.black,
-                                          width: double.infinity,
-                                          child: Center(
-                                            child: Text(
-                                              '${index + 1}',
-                                              style: TextStyle(
-                                                  color: Colors.greenAccent),
-                                            ),
-                                          )),
-                                    )),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Text(
+                                        '½',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 12),
+                                      ),
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        // bx = bx * 2;
+
+                                        tx.value = TextEditingValue(
+                                            text:
+                                                '${double.parse(tx.value.text) * 2}');
+                                      });
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Text(
+                                        '2x',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 12),
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
-                            ),
-                            style: OutlinedButton.styleFrom(
-                                backgroundColor: c2,
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5))),
-                            child: Center(child: Text('$mincon x')),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Text(
+                                'Mines',
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.grey),
+                              ),
+                              SizedBox(
+                                width: double.infinity,
+                                height: 30,
+                                child: OutlinedButton(
+                                  onPressed: () => showCupertinoModalPopup(
+                                    context: context,
+                                    builder: (context) => SizedBox(
+                                      width: double.infinity,
+                                      height: 250,
+                                      child: CupertinoPicker(
+                                          itemExtent: 30,
+                                          scrollController:
+                                              FixedExtentScrollController(
+                                                  initialItem: 7),
+                                          onSelectedItemChanged: (value) {
+                                            setState(() {
+                                              mincon = value + 1;
+                                            });
+                                          },
+                                          children: List.generate(
+                                            24,
+                                            (index) => Container(
+                                                color: Colors.black,
+                                                width: double.infinity,
+                                                child: Center(
+                                                  child: Text(
+                                                    '${index + 1}',
+                                                    style: TextStyle(
+                                                        color:
+                                                            Colors.greenAccent),
+                                                  ),
+                                                )),
+                                          )),
+                                    ),
+                                  ),
+                                  style: OutlinedButton.styleFrom(
+                                      backgroundColor: Restarter.c2,
+                                      foregroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5))),
+                                  child: Center(child: Text('$mincon x')),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    draw = 0;
+                                    bx = double.parse(tx.value.text);
+                                    mx = mincon;
+                                    mat = rand(mx);
+                                    clr = List.filled(25, Restarter.c3);
+                                    end = false;
+                                    setState(() {});
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.green,
+                                      foregroundColor: Restarter.c2,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5))),
+                                  child: Text('Bet'),
+                                ),
+                              )
+                            ],
                           ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              draw = 0;
-                              bx = double.parse(tx.value.text);
-                              mx = mincon;
-                              mat = rand(mx);
-                              clr = List.filled(25, c3);
-                              end = false;
-                              setState(() {});
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                foregroundColor: c2,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5))),
-                            child: Text('Bet'),
-                          ),
-                        )
-                      ],
-                    ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        '🪙$bx , $mx x ',
+                        style: TextStyle(
+                            color: Colors.yellowAccent,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  '🪙$bx , $mx x ',
-                  style: TextStyle(
-                      color: Colors.yellowAccent,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
                 Container(
+                  width: MediaQuery.of(context).size.shortestSide - 40,
                   decoration: BoxDecoration(
-                      color: c2, borderRadius: BorderRadius.circular(5)),
+                      color: Restarter.c2,
+                      borderRadius: BorderRadius.circular(5)),
                   child: Padding(
                     padding: const EdgeInsets.all(5),
                     child: GridView.builder(
@@ -258,7 +289,7 @@ class _MinesState extends State<Mines> {
                       itemBuilder: (context, index) {
                         return InkWell(
                             onTap: () {
-                              if (clr[index] == c3 && end == false) {
+                              if (clr[index] == Restarter.c3 && end == false) {
                                 setState(() {
                                   clr[index] = mat[index] == 1
                                       ? Colors.cyan
@@ -287,7 +318,7 @@ class _MinesState extends State<Mines> {
                                     () => showDialog(
                                       context: context,
                                       builder: (context) => AlertDialog(
-                                        backgroundColor: c2,
+                                        backgroundColor: Restarter.c2,
                                         shape: RoundedRectangleBorder(
                                             side: BorderSide(
                                           color: Colors.green,
@@ -325,13 +356,13 @@ class _MinesState extends State<Mines> {
                               }
                             },
                             child: Visibility(
-                                visible: clr[index] == c3,
+                                visible: clr[index] == Restarter.c3,
                                 replacement: clr[index] == Colors.red
                                     ? bomb()
                                     : diamond(),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: c3,
+                                    color: Restarter.c3,
                                     borderRadius: BorderRadius.circular(5),
                                   ),
                                 )));

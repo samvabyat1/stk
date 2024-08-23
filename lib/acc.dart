@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:stk9/clrs.dart';
+// import 'package:stk9/clrs.dart';
 import 'package:stk9/main.dart';
 import 'package:stk9/start.dart';
 
@@ -34,7 +34,6 @@ class _AccountState extends State<Account> {
     }
   }
 
-  var xp = '⭐';
   var banklist = [
     'State Bank of India',
     'HDFC Bank',
@@ -50,213 +49,300 @@ class _AccountState extends State<Account> {
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIRWpyZgno-E67xcXrg0DqkO3z09GXbL0iOw&s'
   ];
   var selectbank = -1;
-  bool sw = true;
+  bool sw = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                Text(
-                  '🪙 ${Start.b}',
-                  style: TextStyle(
-                    color: Start.b > 0 ? Colors.yellowAccent : Colors.redAccent,
-                    fontSize: 50,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'XP $xp',
-                  style: TextStyle(
-                    color: c4,
-                    fontSize: 16,
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-                Column(
-                  children: [
-                    Visibility(
-                      visible: Start.b == 1000,
-                      child: ListTile(
-                        onTap: () {
-                          HapticFeedback.heavyImpact();
-                        },
-                        isThreeLine: true,
+        backgroundColor: Restarter.c1,
+        appBar: AppBar(
+          automaticallyImplyLeading: true,
+          backgroundColor: Restarter.c1,
+          surfaceTintColor: Restarter.c1,
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(25),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.shortestSide),
+                  child: Column(
+                    children: [
+                      GridView.count(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 8,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: GestureDetector(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => Container(
+                                    color: Restarter.c2,
+                                    child: ListView.builder(
+                                      itemCount: banklist.length,
+                                      itemBuilder: (context, index) => ListTile(
+                                        onTap: () async {
+                                          setState(() {
+                                            selectbank = index;
+                                          });
+                                          box.put('bank', '$selectbank');
 
-                        tileColor: Color(0x60ffff00),
-                        title: Text(
-                          'Start Bonus',
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                        ),
-                        subtitle: Text(
-                          'Tap to claim your one time start bonus of 🪙1000 and start your betting journey!',
-                          style: TextStyle(color: Colors.white70, fontSize: 14),
-                        ),
-                        // leading: Icon(
-                        //   Icons.money,
-                        //   color: Colors.white,
-                        // ),
-                      ),
-                    ),
-                    Visibility(
-                      visible: Start.b < 0,
-                      child: ListTile(
-                        onTap: () {
-                          HapticFeedback.heavyImpact();
-                        },
-                        isThreeLine: true,
-
-                        tileColor: Color(0x60ff0000),
-                        title: Text(
-                          'On Credit',
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                        ),
-                        subtitle: Text(
-                          'You are on credit! Play bets to recover cash or purchase loans from below section, or you can reset your play balance (Trial)',
-                          style: TextStyle(color: Colors.white70, fontSize: 14),
-                        ),
-                        // leading: Icon(
-                        //   Icons.money,
-                        //   color: Colors.white,
-                        // ),
-                      ),
-                    ),
-                    ListTile(
-                      onTap: () {},
-                      tileColor: c2,
-                      title: Text(
-                        'Auto-Trial mode',
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      ),
-                      trailing: Switch(
-                        // splashRadius: 200,
-
-                        activeColor: c4,
-                        inactiveTrackColor: c2,
-                        value: sw,
-                        onChanged: (value) async {
-                          HapticFeedback.heavyImpact();
-                          setState(() {
-                            sw = value;
-                            box.put('sw', '$value');
-                          });
-                        },
-                      ),
-                    ),
-                    ListTile(
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) => Container(
-                            color: c2,
-                            child: ListView.builder(
-                              itemCount: banklist.length,
-                              itemBuilder: (context, index) => ListTile(
-                                onTap: () async {
-                                  setState(() {
-                                    selectbank = index;
-                                  });
-                                  box.put('bank', '$selectbank');
-
-                                  Navigator.pop(context);
-                                },
-                                title: Text(
-                                  banklist[index],
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20),
-                                ),
-                                leading: Image.network(imgbanklist[index]),
+                                          Navigator.pop(context);
+                                        },
+                                        title: Text(
+                                          banklist[index],
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20),
+                                        ),
+                                        leading:
+                                            Image.network(imgbanklist[index]),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                color: Restarter.c3,
+                                child: Center(
+                                    child: Stack(
+                                  children: [
+                                    selectbank == -1
+                                        ? SizedBox()
+                                        : Image.network(
+                                            imgbanklist[selectbank]),
+                                    Center(
+                                      child: Text(
+                                        selectbank == -1
+                                            ? 'Add bank'
+                                            : banklist[selectbank],
+                                        style: TextStyle(
+                                          color: selectbank == -1
+                                              ? Colors.blueGrey.shade600
+                                              : Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )),
                               ),
                             ),
                           ),
-                        );
-                      },
-                      tileColor: c2,
-                      title: Text(
-                        selectbank == -1 ? 'Add bank' : banklist[selectbank],
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                          Column(
+                            children: [
+                              AspectRatio(
+                                aspectRatio: 32 / 15,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Container(
+                                    color: Restarter.c2,
+                                    child: Center(
+                                      child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              '🪙 ${Start.b}',
+                                              style: TextStyle(
+                                                color: Start.b > 0
+                                                    ? Colors.yellowAccent
+                                                    : Colors.redAccent,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Betcoins',
+                                              style: TextStyle(
+                                                color: Colors.blueGrey,
+                                                fontSize: 10,
+                                                // fontStyle: FontStyle.italic,
+                                              ),
+                                            ),
+                                          ]),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Spacer(),
+                              AspectRatio(
+                                aspectRatio: 32 / 15,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      HapticFeedback.heavyImpact();
+                                      sw = !sw;
+
+                                      box.put('sw', '$sw');
+                                      setState(() {});
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              action: SnackBarAction(
+                                                textColor: Restarter.c4,
+                                                label: 'RESTART',
+                                                onPressed: () {
+                                                  Restarter.restartapp(context);
+                                                  // Navigator.pop(context);
+                                                  // Navigator.pushReplacement(
+                                                  //     context,
+                                                  //     MaterialPageRoute(
+                                                  //       builder: (context) =>
+                                                  //           Flashh(),
+                                                  //     ));
+                                                },
+                                              ),
+                                              content:
+                                                  Text('Restart the app!')));
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          gradient: sw
+                                              ? LinearGradient(colors: [
+                                                  Restarter.c4,
+                                                  Colors.green,
+                                                ])
+                                              : LinearGradient(colors: [
+                                                  Restarter.c3,
+                                                  Restarter.c2
+                                                ])),
+                                      child: Center(
+                                          child: Text(
+                                        'Amoled Theme',
+                                        style: TextStyle(
+                                            color: sw
+                                                ? Colors.white
+                                                : Restarter.c4),
+                                      )),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      leading: selectbank == -1
-                          ? Icon(
-                              Icons.account_balance,
-                              color: Colors.white,
-                            )
-                          : Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ClipOval(
-                                  child:
-                                      Image.network(imgbanklist[selectbank])),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      GridView.count(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 8,
+                        childAspectRatio: 2,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: GestureDetector(
+                              onTap: () {
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                    content: Text(
+                                        'Your XP seems to be very low! Play bets to unlock Loans.')));
+                              },
+                              child: Container(
+                                color: Colors.white10,
+                                child: Center(
+                                    child: Text(
+                                  'Buy Loans',
+                                  style: TextStyle(color: Colors.white),
+                                )),
+                              ),
                             ),
-                    ),
-                    ListTile(
-                      onTap: () {},
-                      tileColor: c2,
-                      title: Text(
-                        'Withdraw from bank',
-                        style: TextStyle(color: Colors.white70, fontSize: 18),
+                          ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: GestureDetector(
+                              onTap: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            'Feature not available right now!')));
+                              },
+                              child: Container(
+                                color: Restarter.c3,
+                                child: Center(
+                                    child: Text(
+                                  'Buy Coins',
+                                  style: TextStyle(color: Colors.white),
+                                )),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      leading: Icon(
-                        Icons.file_download_done,
-                        color: Colors.white70,
+                      SizedBox(
+                        height: 12,
                       ),
-                    ),
-                    ListTile(
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                                'Your XP seems to be very low! Play bets to unlock Loans.')));
-                      },
-                      tileColor: c2,
-                      title: Text(
-                        'Loans',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      AspectRatio(
+                        aspectRatio: 8 / 3,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            color: Start.b < 0
+                                ? Color(0x30ff0000)
+                                : Color(0x30ffff00),
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  textAlign: TextAlign.center,
+                                  Start.b < 0
+                                      ? 'You are on credit! Play bets to recover cash or purchase loans from below section, or you can reset your play balance (Trial)'
+                                      : 'Tap to claim your one time start bonus of 🪙1000 and start your betting journey!',
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                      leading: Icon(
-                        Icons.money,
-                        color: Colors.white,
+                      SizedBox(
+                        height: 20,
                       ),
-                    ),
-                    ListTile(
-                      onTap: () {},
-                      tileColor: c2,
-                      title: Text(
-                        'Export',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      Text(
+                        textAlign: TextAlign.center,
+                        'Amoled theme feature is currently experimental!',
+                        style: TextStyle(
+                          color: Colors.blueGrey,
+                          fontSize: 10,
+                        ),
                       ),
-                      leading: Icon(
-                        Icons.download_for_offline_outlined,
-                        color: Colors.white,
-                      ),
-                    ),
-                    ListTile(
-                      onTap: () {},
-                      tileColor: c2,
-                      title: Text(
-                        'Import',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                      leading: Icon(
-                        Icons.import_export,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
+                      // SizedBox(
+                      //   height: 50,
+                      //   width: 50,
+                      //   child: Card(
+                      //     color: Restarter.c1,
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: 50,
+                      //   width: 50,
+                      //   child: Card(
+                      //     color: Restarter.c2,
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: 50,
+                      //   width: 50,
+                      //   child: Card(
+                      //     color: Restarter.c3,
+                      //   ),
+                      // ),
+                    ],
+                  ),
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

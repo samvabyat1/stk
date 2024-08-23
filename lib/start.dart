@@ -1,13 +1,12 @@
 import 'dart:math';
 
 import 'package:app_links/app_links.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:stk9/acc.dart';
-import 'package:stk9/clrs.dart';
+// import 'package:stk9/clrs.dart';
 import 'package:stk9/link.dart';
-import 'package:stk9/load.dart';
 import 'package:stk9/main.dart';
 import 'package:stk9/mines.dart';
 
@@ -66,6 +65,7 @@ class _StartState extends State<Start> {
   }
 
   var tabchnger = 1;
+  bool lm = false;
 
   @override
   Widget build(BuildContext context) {
@@ -78,84 +78,172 @@ class _StartState extends State<Start> {
     var drwlist = ['Loans', 'Policies', 'About', 'Terms of Service'];
 
     return Scaffold(
-      // backgroundColor: c1,
+      backgroundColor: Restarter.c1,
       drawer: Drawer(
-          backgroundColor: c2,
+          backgroundColor: Restarter.c2,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 50),
-            child: Stack(children: [
-              ListView.builder(
-                itemCount: drwlist.length + 1,
-                itemBuilder: (context, index) => index == 0
-                    ? InkWell(
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Account(),
-                            )),
-                        child: ListTile(
-                          title: Text(
-                            '🪙 ${Start.b}',
-                            style: TextStyle(
-                                color: Colors.yellowAccent,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text(
-                            'Account balance',
-                            style:
-                                TextStyle(color: Colors.white30, fontSize: 12),
-                          ),
-                        ),
-                      )
-                    : ListTile(
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Load(),
-                            )),
+            child: ListView.builder(
+              itemCount: drwlist.length + 1,
+              itemBuilder: (context, index) => index == 0
+                  ? InkWell(
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Account(),
+                          )),
+                      child: ListTile(
                         title: Text(
-                          drwlist[index - 1],
-                          style: TextStyle(color: Colors.white70),
+                          '🪙 ${Start.b}',
+                          style: TextStyle(
+                              color: Colors.yellowAccent,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(
+                          'Account balance',
+                          style: TextStyle(color: Colors.white30, fontSize: 12),
                         ),
                       ),
-              ),
-              Positioned(
-                bottom: 0,
-                left: 25,
-                child: GestureDetector(
-                  onTap: () {
-                    HapticFeedback.heavyImpact();
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          c3,
-                          c1,
-                        ],
+                    )
+                  : ListTile(
+                      onTap: () => index != 3
+                          ? Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Load(),
+                              ))
+                          : showModalBottomSheet(
+                              context: context,
+                              builder: (context) => Container(
+                                color: Restarter.c2,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'About',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            // fontWeight: FontWeight.bold,
+                                            fontSize: 30,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Warning: This app was made only for entertaiment purposes and thereby simulates mere 1% functions of a renowned app available on PlayStore. So this app does not claims any copyright from the original makers and is free from any commercial usage.',
+                                          style: TextStyle(
+                                            color: Colors.blueGrey,
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 40,
+                                        ),
+                                        Text(
+                                          'Developers',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            // fontWeight: FontWeight.bold,
+                                            fontSize: 26,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: Column(
+                                            children: [
+                                              SizedBox(
+                                                height: 40,
+                                                child: Row(
+                                                  children: [
+                                                    ClipOval(
+                                                      child: AspectRatio(
+                                                        aspectRatio: 1,
+                                                        child: Container(
+                                                          height: 50,
+                                                          color: Colors.black,
+                                                          child: Image.asset(
+                                                            'assets/stake-logo.png',
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 15,
+                                                    ),
+                                                    Text(
+                                                      'stk9',
+                                                      style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 20,
+                                              ),
+                                              SizedBox(
+                                                height: 40,
+                                                child: Row(
+                                                  children: [
+                                                    ClipOval(
+                                                      child: Image.network(
+                                                          'https://avatars.githubusercontent.com/u/127547778'),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 15,
+                                                    ),
+                                                    Text(
+                                                      'samvabya',
+                                                      style: TextStyle(
+                                                        color: Colors.brown,
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 30,
+                                        ),
+                                        Text(
+                                          'Note: Any contributions in features will be entertained.',
+                                          style: TextStyle(
+                                            color: Colors.blueGrey,
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                      title: Text(
+                        drwlist[index - 1],
+                        style: TextStyle(color: Colors.white70),
                       ),
-                      borderRadius: BorderRadius.circular(50),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
-                      child: Text(
-                        '@samvabya',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 10,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            ]),
+            ),
           )),
       appBar: AppBar(
-        // backgroundColor: c1,
+        backgroundColor: Restarter.c1,
+        surfaceTintColor: Restarter.c1,
         title: Image.asset(
           'assets/stake-logo.png',
           fit: BoxFit.contain,
@@ -176,7 +264,7 @@ class _StartState extends State<Start> {
                     itemBuilder: (context, index) => Padding(
                       padding: const EdgeInsets.all(2),
                       child: Container(
-                        color: c3,
+                        color: Restarter.c3,
                         width: 320,
                         child: Image.network(
                           srcheadlist[index],
@@ -267,11 +355,11 @@ class _StartState extends State<Start> {
                         ),
                       },
                       decoration: BoxDecoration(
-                        color: c2,
+                        color: Restarter.c2,
                         borderRadius: BorderRadius.circular(50),
                       ),
                       thumbDecoration: BoxDecoration(
-                        color: c1,
+                        color: Restarter.c1,
                         borderRadius: BorderRadius.circular(50),
                         boxShadow: [
                           BoxShadow(
@@ -318,7 +406,7 @@ class _StartState extends State<Start> {
         child: Container(
           width: double.infinity,
           height: 25,
-          color: c3,
+          color: Restarter.c3,
           child: Center(
               child: Text(
             '🪙 ${Start.b}',
@@ -358,7 +446,12 @@ class _StartState extends State<Start> {
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10),
+                crossAxisCount:
+                    MediaQuery.of(context).orientation == Orientation.portrait
+                        ? 2
+                        : 4,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10),
             children: [
               InkWell(
                   onTap: () => Navigator.push(
@@ -396,48 +489,71 @@ class _StartState extends State<Start> {
                       )),
                   child: lobitem(
                       url: 'https://casino.guide/media/plinko-logo.jpg')),
-              lobitem(url: 'https://casino.guide/media/crash-logo.jpg'),
-              lobitem(
-                  url:
-                      'https://mediumrare.imgix.net/59d1df22a2931a965fc241a436a398f460e71ea9d0214f66780a52b56655d392?q=85'),
-              lobitem(
-                  url:
-                      'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRkElyyuCopjUxyVA0BRN5sKyPqjC4UmLWEKLNGe9hh1TXvO0qn'),
-              lobitem(
-                  url:
-                      'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSUQ_ojtF9fcFqKa298A_8W7gthoMKCcatws396KRWFYv5Xpn_Y'),
-              lobitem(
-                  url:
-                      'https://bc.imgix.net/game/image/cc1d6d33-e97f-4948-8513-13f7fc450157.png?auto=format&dpr=2.625&w=200'),
-              lobitem(
-                  url:
-                      'https://efirbet.com/static/uploads/kazino-igri-provably-fair-wheel.png'),
-              lobitem(url: 'https://www.tipminer.com/casinos/stake-slide.png'),
-              lobitem(
-                  url:
-                      'https://crashmoney.games/wp-content/uploads/2023/07/Dragon-Tiger-Logo-e1688559840643-1200x1272.jpeg'),
-              lobitem(
-                  url:
-                      'https://ballislife.com/betting/wp-content/uploads/sites/20/2024/04/Stake.us-Table-Games-Blackjack-2.png'),
-              lobitem(
-                  url:
-                      'https://chipy.com/images_repo/game_logo/214x167/stake_games_hilo.webp'),
-              lobitem(
-                  url:
-                      'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRbMGbwyUgtxTM1iiVXZfcfpEVcJuu12efl2fda2Rn_Ez2Wk9MD'),
-              lobitem(
-                  url:
-                      'https://bc.imgix.net/game/image/df9765a5-6f57-4db0-afa6-ab2e27562d99.png?auto=format&dpr=2.625&w=200'),
             ],
+          ),
+        ),
+        Visibility(
+          visible: lm,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: GridView(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount:
+                      MediaQuery.of(context).orientation == Orientation.portrait
+                          ? 2
+                          : 4,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10),
+              children: [
+                lobitem(url: 'https://casino.guide/media/crash-logo.jpg'),
+                lobitem(
+                    url:
+                        'https://mediumrare.imgix.net/59d1df22a2931a965fc241a436a398f460e71ea9d0214f66780a52b56655d392?q=85'),
+                lobitem(
+                    url:
+                        'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRkElyyuCopjUxyVA0BRN5sKyPqjC4UmLWEKLNGe9hh1TXvO0qn'),
+                lobitem(
+                    url:
+                        'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSUQ_ojtF9fcFqKa298A_8W7gthoMKCcatws396KRWFYv5Xpn_Y'),
+                lobitem(
+                    url:
+                        'https://bc.imgix.net/game/image/cc1d6d33-e97f-4948-8513-13f7fc450157.png?auto=format&dpr=2.625&w=200'),
+                lobitem(
+                    url:
+                        'https://efirbet.com/static/uploads/kazino-igri-provably-fair-wheel.png'),
+                lobitem(
+                    url: 'https://www.tipminer.com/casinos/stake-slide.png'),
+                lobitem(
+                    url:
+                        'https://crashmoney.games/wp-content/uploads/2023/07/Dragon-Tiger-Logo-e1688559840643-1200x1272.jpeg'),
+                lobitem(
+                    url:
+                        'https://ballislife.com/betting/wp-content/uploads/sites/20/2024/04/Stake.us-Table-Games-Blackjack-2.png'),
+                lobitem(
+                    url:
+                        'https://chipy.com/images_repo/game_logo/214x167/stake_games_hilo.webp'),
+                lobitem(
+                    url:
+                        'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRbMGbwyUgtxTM1iiVXZfcfpEVcJuu12efl2fda2Rn_Ez2Wk9MD'),
+                lobitem(
+                    url:
+                        'https://bc.imgix.net/game/image/df9765a5-6f57-4db0-afa6-ab2e27562d99.png?auto=format&dpr=2.625&w=200'),
+              ],
+            ),
           ),
         ),
         SizedBox(
           height: 20,
         ),
         OutlinedButton(
-          onPressed: () {},
+          onPressed: () {
+            lm = true;
+            setState(() {});
+          },
           style: OutlinedButton.styleFrom(
-            foregroundColor: c4,
+            foregroundColor: Restarter.c4,
           ),
           child: Text('Load more'),
         ),
@@ -459,15 +575,16 @@ class lobitem extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: Container(
-        color: c3,
+        color: Restarter.c3,
         // height: 100,
         child: Stack(
           fit: StackFit.expand,
           children: [
-            Image.network(
-              url,
-              fit: BoxFit.cover,
-            ),
+            // Image.network(
+            //   url,
+            //   fit: BoxFit.cover,
+            // ),
+            CachedNetworkImage(imageUrl: url, fit: BoxFit.cover,),
             Positioned(
               top: 0,
               right: 0,
@@ -558,11 +675,11 @@ class tbs extends StatelessWidget {
             ),
           },
           decoration: BoxDecoration(
-            color: c2,
+            color: Restarter.c2,
             borderRadius: BorderRadius.circular(50),
           ),
           thumbDecoration: BoxDecoration(
-            color: c1,
+            color: Restarter.c1,
             borderRadius: BorderRadius.circular(50),
             boxShadow: [
               BoxShadow(
