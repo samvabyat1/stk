@@ -5,9 +5,9 @@ Popular Betting games site replicated into an android app simulating its origina
 
 **Completed in just 2 days (v1.0)**
 
-**This project showcases my special skills, i.e., UI/UX and Game production. 
+- This project showcases my special skills, i.e., UI/UX and Game production. 
 
-**Only few games are available till now. 
+- Only few games are available till now. 
 
 ## Templates
 
