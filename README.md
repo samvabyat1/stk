@@ -22,7 +22,7 @@ Resetting bet-coins in the app:
 
 ![Untitled 1](https://github.com/user-attachments/assets/15c054a9-cc92-46d6-b115-56a655edd9ba)
 
-Download app from releases section.
+[Install App](https://github.com/samvabyat1/stk/releases)
 
 
 ## Tech Stack
